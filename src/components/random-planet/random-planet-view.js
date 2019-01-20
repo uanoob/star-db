@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 
 const RandomPlanetView = ({
   planet: {
@@ -30,5 +31,15 @@ const RandomPlanetView = ({
     </div>
   </Fragment>
 );
+
+RandomPlanetView.propTypes = {
+  planet: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    population: PropTypes.string.isRequired,
+    rotationPeriod: PropTypes.string.isRequired,
+    diameter: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default RandomPlanetView;
