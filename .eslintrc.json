@@ -7,6 +7,18 @@
   },
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "no-underscore-dangle": ["error", { "allow": ["_id", "_api"] }]
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "_id",
+          "_api",
+          "_transformPlanet",
+          "_extractId",
+          "_transformPerson",
+          "_transformStarShip"
+        ]
+      }
+    ]
   }
 }
