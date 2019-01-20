@@ -1,6 +1,39 @@
 class SwapiService {
   _api = 'https://swapi.co/api';
 
+  _extractId = (item) => {
+    const regexp = /\/([0-9]*)\/$/;
+    return item.url.match(regexp)[1];
+  };
+
+  _transformPlanet = planet => ({
+    id: this._extractId(planet),
+    name: planet.name,
+    population: planet.population,
+    rotationPeriod: planet.rotation_period,
+    diameter: planet.diameter,
+  });
+
+  _transformStarShip = starship => ({
+    id: this._extractId(starship),
+    name: starship.name,
+    model: starship.model,
+    manufacturer: starship.manufacturer,
+    costInCredits: starship.costInCredits,
+    length: starship.length,
+    crew: starship.crew,
+    passengers: starship.passengers,
+    cargoCapacity: starship.cargoCapacity,
+  });
+
+  _transformPerson = person => ({
+    id: this._extractId(person),
+    name: person.name,
+    gender: person.gender,
+    birthYear: person.birthYear,
+    eyeColor: person.eyeColor,
+  });
+
   async getResource(url) {
     const res = await fetch(`${this._api}${url}`);
     if (!res.ok) {
@@ -12,54 +45,33 @@ class SwapiService {
 
   async getAllPeople() {
     const res = await this.getResource('/people/');
-    return res.results;
+    return res.results.map(this._transformPerson);
   }
 
   async getPerson(id) {
-    const res = await this.getResource(`/people/${id}/`);
-    return res;
+    const person = await this.getResource(`/people/${id}/`);
+    return this._transformPerson(person);
   }
 
   async getAllPlanets() {
     const res = await this.getResource('/planets/');
-    return res.results;
+    return res.results.map(this._transformPlanet);
   }
 
   async getPlanet(id) {
-    const res = await this.getResource(`/planets/${id}/`);
-    return res;
+    const planet = await this.getResource(`/planets/${id}/`);
+    return this._transformPlanet(planet);
   }
 
   async getAllStarShips() {
     const res = await this.getResource('/starships/');
-    return res.results;
+    return res.results.map(this._transformStarShip);
   }
 
   async getStarship(id) {
-    const res = await this.getResource(`/starships/${id}/`);
-    return res;
+    const starship = await this.getResource(`/starships/${id}/`);
+    return this._transformStarShip(starship);
   }
 }
 
 export default SwapiService;
-
-// const swapi = new SwapiService();
-// swapi
-//   .getAllPeople()
-//   .then((people) => {
-//     people.forEach((p) => {
-//       console.log(p.name);
-//     });
-//   })
-//   .catch((err) => {
-//     console.log(err.message);
-//   });
-// const p = swapi
-//   .getPerson(5)
-//   .then((person) => {
-//     console.log(person);
-//   })
-//   .catch((err) => {
-//     console.log(err.message);
-//   });
-// console.log(p);
