@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-
+import SwapiService from '../../services/swapi-service';
 import Header from '../header/header';
 import RandomPlanet from '../random-planet/random-planet';
 import ItemList from '../item-list/item-list';
 import PersonDetails from '../person-details/person-details';
 
 class App extends Component {
+  swapiService = new SwapiService();
+
   state = {
-    selected: null,
+    selected: '3',
   };
 
   onItemSelected = (id) => {
@@ -25,9 +27,15 @@ class App extends Component {
 
         <div className="row mb2">
           <div className="col-md-6">
-            <ItemList onItemSelected={this.onItemSelected} />
+            <ItemList
+              onItemSelected={this.onItemSelected}
+              getData={this.swapiService.getAllPeople}
+              renderItem={item => item.name}
+            />
           </div>
-          <div className="col-md-6">{selected ? <PersonDetails id={selected} /> : null}</div>
+          <div className="col-md-6">
+            <PersonDetails id={selected} />
+          </div>
         </div>
       </div>
     );

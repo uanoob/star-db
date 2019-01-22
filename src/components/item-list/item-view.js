@@ -1,22 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ItemView = ({ person, onItemSelected }) => (
-  <li key={person.id}>
-    <span
-      className="list-group-item"
-      role="button"
-      tabIndex="0"
-      onClick={() => onItemSelected(person.id)}
-      onKeyDown={() => onItemSelected(person.id)}
-    >
-      {person.name}
-    </span>
-  </li>
-);
+const ItemView = ({ item, renderItem, onItemSelected }) => {
+  const label = renderItem(item);
+  return (
+    <li key={item.id}>
+      <span
+        className="list-group-item"
+        role="button"
+        tabIndex="0"
+        onClick={() => onItemSelected(item.id)}
+        onKeyDown={() => onItemSelected(item.id)}
+      >
+        {label}
+      </span>
+    </li>
+  );
+};
 
 ItemView.propTypes = {
-  person: PropTypes.shape({
+  item: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     gender: PropTypes.string.isRequired,
@@ -24,6 +27,7 @@ ItemView.propTypes = {
     eyeColor: PropTypes.string.isRequired,
   }).isRequired,
   onItemSelected: PropTypes.func.isRequired,
+  renderItem: PropTypes.func.isRequired,
 };
 
 export default ItemView;

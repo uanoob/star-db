@@ -1,74 +1,64 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './item-list.css';
-import SwapiService from '../../services/swapi-service';
 import Spinner from '../spinner/spinner';
-import ErrorIndicator from '../error-indicator/error-indicator';
 import ItemView from './item-view';
+import ErrorBoundry from '../error-boundry/error-boundry';
+import ErrorButton from '../error-button/error-button';
 
 class ItemList extends Component {
-  SwapiService = new SwapiService();
-
   state = {
-    people: [],
+    itemList: [],
     loading: true,
-    error: false,
   };
 
   componentDidMount() {
-    this.getAllPerson();
+    const { getData } = this.props;
+    getData()
+      .then((itemList) => {
+        this.setState({
+          itemList,
+          loading: false,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  onPeopleLoaded = (people) => {
-    this.setState({
-      people,
-      loading: false,
-    });
-  };
-
-  onError = () => {
-    this.setState({
-      error: true,
-      loading: false,
-    });
-  };
-
-  getAllPerson = () => {
-    this.SwapiService.getAllPeople()
-      .then((person) => {
-        this.onPeopleLoaded(person);
-      })
-      .catch(() => {
-        this.onError();
-      });
-  };
-
   renderItems = (arr) => {
-    const { onItemSelected } = this.props;
+    const { onItemSelected, renderItem } = this.props;
     return (
       <ul className="item-list list-group">
-        {arr.map(person => (
-          <ItemView key={person.id} person={person} onItemSelected={onItemSelected} />
+        {arr.map(item => (
+          <ItemView
+            key={item.id}
+            item={item}
+            renderItem={renderItem}
+            onItemSelected={onItemSelected}
+          />
         ))}
       </ul>
     );
   };
 
   render() {
-    const { people, loading, error } = this.state;
+    const { itemList, loading } = this.state;
 
     return (
-      <Fragment>
+      <ErrorBoundry>
         {loading ? <Spinner /> : null}
-        {error ? <ErrorIndicator /> : null}
-        {!(loading && error) ? this.renderItems(people) : null}
-      </Fragment>
+        {!loading ? this.renderItems(itemList) : null}
+        <ErrorButton />
+      </ErrorBoundry>
     );
   }
 }
 
 ItemList.propTypes = {
   onItemSelected: PropTypes.func.isRequired,
+  getData: PropTypes.func.isRequired,
+  renderItem: PropTypes.func.isRequired,
 };
 
 export default ItemList;
