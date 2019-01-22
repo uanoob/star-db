@@ -13,6 +13,7 @@
         "allow": [
           "_id",
           "_api",
+          "_image",
           "_transformPlanet",
           "_extractId",
           "_transformPerson",
