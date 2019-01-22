@@ -14,7 +14,7 @@ class SwapiService {
     diameter: planet.diameter,
   });
 
-  _transformStarShip = starship => ({
+  _transformStarship = starship => ({
     id: this._extractId(starship),
     name: starship.name,
     model: starship.model,
@@ -34,44 +34,54 @@ class SwapiService {
     eyeColor: person.eye_color,
   });
 
-  async getResource(url) {
+  getResource = async (url) => {
     const res = await fetch(`${this._api}${url}`);
     if (!res.ok) {
       throw new Error(`Could not fetch ${`${this._api}${url}`}, received ${res.status}`);
     }
     const body = await res.json();
     return body;
-  }
+  };
 
-  async getAllPeople() {
+  getAllPeople = async () => {
     const res = await this.getResource('/people/');
     return res.results.map(this._transformPerson);
-  }
+  };
 
-  async getPerson(id) {
+  getPerson = async (id) => {
     const person = await this.getResource(`/people/${id}/`);
     return this._transformPerson(person);
-  }
+  };
 
-  async getAllPlanets() {
+  getAllPlanets = async () => {
     const res = await this.getResource('/planets/');
     return res.results.map(this._transformPlanet);
-  }
+  };
 
-  async getPlanet(id) {
+  getPlanet = async (id) => {
     const planet = await this.getResource(`/planets/${id}/`);
     return this._transformPlanet(planet);
-  }
+  };
 
-  async getAllStarShips() {
+  getAllStarships = async () => {
     const res = await this.getResource('/starships/');
-    return res.results.map(this._transformStarShip);
-  }
+    return res.results.map(this._transformStarship);
+  };
 
-  async getStarship(id) {
+  getStarship = async (id) => {
     const starship = await this.getResource(`/starships/${id}/`);
-    return this._transformStarShip(starship);
-  }
+    return this._transformStarship(starship);
+  };
 }
+
+// const swapi = new SwapiService();
+// swapi
+//   .getAllStarShips()
+//   .then((res) => {
+//     console.log(res);
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
 
 export default SwapiService;
