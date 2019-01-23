@@ -5,6 +5,7 @@ import RandomPlanet from '../random-planet/random-planet';
 // import ItemList from '../item-list/item-list';
 import ItemDetails from '../item-details/item-details';
 import Record from '../record/record';
+import { SwapiServiceProvider } from '../swapi-service-context/swapi-service-context';
 
 class App extends Component {
   swapiService = new SwapiService();
@@ -25,10 +26,9 @@ class App extends Component {
       getPerson, getPersonImage, getStarship, getStarshipImage,
     } = this.swapiService;
     return (
-      <div>
+      <SwapiServiceProvider value={this.swapiService}>
         <Header />
         <RandomPlanet />
-
         <div className="row mb2">
           <div className="col-md-6">
             {/* <ItemList
@@ -50,7 +50,7 @@ class App extends Component {
             </ItemDetails>
           </div>
         </div>
-      </div>
+      </SwapiServiceProvider>
     );
   }
 }

@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './item-details.css';
-// import SwapiService from '../../services/swapi-service';
 import Spinner from '../spinner/spinner';
 import ErrorBoundry from '../error-boundry/error-boundry';
 import ErrorButton from '../error-button/error-button';
 
 class ItemDetails extends Component {
-  // swapiService = new SwapiService();
-
   state = {
     item: null,
     image: '',
