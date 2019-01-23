@@ -67,7 +67,7 @@ class SwapiService {
     return this._transformPlanet(planet);
   };
 
-  getPLanetImage = ({ id }) => `${this._image}/planets/${id}.jpg`;
+  getPlanetImage = ({ id }) => `${this._image}/planets/${id}.jpg`;
 
   getAllStarships = async () => {
     const res = await this.getResource('/starships/');
