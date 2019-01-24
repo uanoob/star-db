@@ -22,9 +22,6 @@ ItemView.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    gender: PropTypes.string.isRequired,
-    birthYear: PropTypes.string.isRequired,
-    eyeColor: PropTypes.string.isRequired,
   }).isRequired,
   onItemSelected: PropTypes.func.isRequired,
   renderItem: PropTypes.func.isRequired,
