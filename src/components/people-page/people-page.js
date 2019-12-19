@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ItemList from '../item-list/item-list';
 import ItemDetails from '../item-details/item-details';
 import Record from '../record/record';
-import SwapiServiceContext from '../swapi-service-context/swapi-service-context';
+import SwapiServiceContext from '../swapi-service-context';
 
 const PeoplePage = ({ id, onItemSelected }) => {
     const { getAllPeople, getPerson, getPersonImage } = useContext(

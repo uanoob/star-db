@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router, Switch, Route, Redirect,
 } from 'react-router-dom';
 import SwapiService from '../../services/swapi-service';
-import SwapiServiceContext from '../swapi-service-context/swapi-service-context';
+import SwapiServiceContext from '../swapi-service-context';
 import Header from '../header/header';
 import RandomPlanet from '../random-planet/random-planet';
 const PeoplePage = lazy(() => import('../people-page/people-page'));
@@ -25,12 +25,6 @@ class App extends Component {
 
   render() {
     const { id } = this.state;
-    const {
-      getStarship,
-      getStarshipImage,
-      getPlanet,
-      getPlanetImage,
-    } = this.swapiService;
     return (
       <SwapiServiceContext.Provider value={this.swapiService}>
         <Router>
@@ -57,9 +51,6 @@ class App extends Component {
                     <StarshipsPage
                       id={id}
                       onItemSelected={this.onItemSelected}
-                      getStarship={getStarship}
-                      getStarshipImage={getStarshipImage}
-                      getData={this.swapiService.getAllStarships}
                     />
                   </Suspense>
                 )}
@@ -71,9 +62,6 @@ class App extends Component {
                     <PlanetsPage
                       id={id}
                       onItemSelected={this.onItemSelected}
-                      getPlanet={getPlanet}
-                      getPlanetImage={getPlanetImage}
-                      getData={this.swapiService.getAllPlanets}
                     />
                   </Suspense>
                 )}

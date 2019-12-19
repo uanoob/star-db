@@ -18,7 +18,7 @@ const ItemList = ({ onItemSelected, renderItem, getData }) => {
         console.log(err);
         setLoading(false);
       });
-  }, [getData, itemList]);
+  }, [getData]);
 
   const renderItems = arr => (
     <ul className='item-list list-group'>
