@@ -1,14 +1,14 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, Suspense, lazy } from 'react';
 import {
   BrowserRouter as Router, Switch, Route, Redirect,
 } from 'react-router-dom';
 import SwapiService from '../../services/swapi-service';
+import SwapiServiceContext from '../swapi-service-context/swapi-service-context';
 import Header from '../header/header';
 import RandomPlanet from '../random-planet/random-planet';
-import PeoplePage from '../people-page/people-page';
-import StarshipsPage from '../starship-page/starship-page';
-import PlanetsPage from '../planets-page/planets-page';
-import { SwapiServiceProvider } from '../swapi-service-context/swapi-service-context';
+const PeoplePage = lazy(() => import('../people-page/people-page'));
+const StarshipsPage = lazy(() => import('../starship-page/starship-page'));
+const PlanetsPage = lazy(() => import('../planets-page/planets-page'));
 
 class App extends Component {
   swapiService = new SwapiService();
@@ -26,15 +26,13 @@ class App extends Component {
   render() {
     const { id } = this.state;
     const {
-      getPerson,
-      getPersonImage,
       getStarship,
       getStarshipImage,
       getPlanet,
       getPlanetImage,
     } = this.swapiService;
     return (
-      <SwapiServiceProvider value={this.swapiService}>
+      <SwapiServiceContext.Provider value={this.swapiService}>
         <Router>
           <Fragment>
             <Header />
@@ -44,44 +42,47 @@ class App extends Component {
               <Route
                 path="/people"
                 render={() => (
-                  <PeoplePage
-                    id={id}
-                    onItemSelected={this.onItemSelected}
-                    getPerson={getPerson}
-                    getPersonImage={getPersonImage}
-                    getData={this.swapiService.getAllPeople}
-                  />
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <PeoplePage
+                      id={id}
+                      onItemSelected={this.onItemSelected}
+                    />
+                  </Suspense>
                 )}
               />
               <Route
                 path="/starships"
                 render={() => (
-                  <StarshipsPage
-                    id={id}
-                    onItemSelected={this.onItemSelected}
-                    getStarship={getStarship}
-                    getStarshipImage={getStarshipImage}
-                    getData={this.swapiService.getAllStarships}
-                  />
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <StarshipsPage
+                      id={id}
+                      onItemSelected={this.onItemSelected}
+                      getStarship={getStarship}
+                      getStarshipImage={getStarshipImage}
+                      getData={this.swapiService.getAllStarships}
+                    />
+                  </Suspense>
                 )}
               />
               <Route
                 path="/planets"
                 render={() => (
-                  <PlanetsPage
-                    id={id}
-                    onItemSelected={this.onItemSelected}
-                    getPlanet={getPlanet}
-                    getPlanetImage={getPlanetImage}
-                    getData={this.swapiService.getAllPlanets}
-                  />
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <PlanetsPage
+                      id={id}
+                      onItemSelected={this.onItemSelected}
+                      getPlanet={getPlanet}
+                      getPlanetImage={getPlanetImage}
+                      getData={this.swapiService.getAllPlanets}
+                    />
+                  </Suspense>
                 )}
               />
               <Redirect to="/" />
             </Switch>
           </Fragment>
         </Router>
-      </SwapiServiceProvider>
+      </SwapiServiceContext.Provider>
     );
   }
 }

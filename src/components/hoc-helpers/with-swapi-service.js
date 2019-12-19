@@ -1,10 +1,10 @@
 import React from 'react';
-import { SwapiServiceConsumer } from '../swapi-service-context/swapi-service-context';
+import SwapiServiceContext from '../swapi-service-context/swapi-service-context';
 
 const withSwapiService = Wrapped => props => (
-  <SwapiServiceConsumer>
+  <SwapiServiceContext.Consumer>
     {swapiService => <Wrapped {...props} swapiService={swapiService} />}
-  </SwapiServiceConsumer>
+  </SwapiServiceContext.Consumer>
 );
 
 export default withSwapiService;

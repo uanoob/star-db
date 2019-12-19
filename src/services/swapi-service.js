@@ -82,14 +82,4 @@ class SwapiService {
   getStarshipImage = ({ id }) => `${this._image}/starships/${id}.jpg`;
 }
 
-// const swapi = new SwapiService();
-// swapi
-//   .getAllStarShips()
-//   .then((res) => {
-//     console.log(res);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
-
 export default SwapiService;
