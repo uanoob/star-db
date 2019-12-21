@@ -1,30 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter, Link } from 'react-router-dom';
 
-const ItemView = ({ item, renderItem, onItemSelected }) => {
-  const label = renderItem(item);
-  return (
-    <li key={item.id}>
-      <span
-        className="list-group-item"
-        role="button"
-        tabIndex="0"
-        onClick={() => onItemSelected(item.id)}
-        onKeyDown={() => onItemSelected(item.id)}
-      >
-        {label}
+const ItemView = ({ item: { id, name }, match }) => (
+  <li key={id}>
+    <Link to={`${match.path}/${id}`}>
+      <span className='list-group-item' role='button' tabIndex='0'>
+        {name}
       </span>
-    </li>
-  );
+    </Link>
+  </li>
+);
+
+ItemView.defaultProps = {
+  id: '',
+  name: '',
 };
 
 ItemView.propTypes = {
-  item: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
-  onItemSelected: PropTypes.func.isRequired,
-  renderItem: PropTypes.func.isRequired,
+  id: PropTypes.string,
+  name: PropTypes.string,
 };
 
-export default ItemView;
+export default withRouter(ItemView);

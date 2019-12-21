@@ -4,12 +4,12 @@ import './item-list.css';
 import Spinner from '../spinner/spinner';
 import ItemView from './item-view';
 
-const ItemList = ({ onItemSelected, renderItem, getData }) => {
+const ItemList = ({ getList }) => {
   const [itemList, setItemList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getData()
+    getList()
       .then(data => {
         setItemList(data);
         setLoading(false);
@@ -18,28 +18,21 @@ const ItemList = ({ onItemSelected, renderItem, getData }) => {
         console.log(err);
         setLoading(false);
       });
-  }, [getData]);
+  }, [getList]);
 
-  const renderItems = arr => (
+  return loading ? (
+    <Spinner />
+  ) : (
     <ul className='item-list list-group'>
-      {arr.map(item => (
-        <ItemView
-          key={item.id}
-          item={item}
-          renderItem={renderItem}
-          onItemSelected={onItemSelected}
-        />
+      {itemList.map(item => (
+        <ItemView key={item.id} item={item} />
       ))}
     </ul>
   );
-
-  return loading ? <Spinner /> : renderItems(itemList);
 };
 
 ItemList.propTypes = {
-  onItemSelected: PropTypes.func.isRequired,
-  getData: PropTypes.func.isRequired,
-  renderItem: PropTypes.func.isRequired,
+  getList: PropTypes.func.isRequired,
 };
 
 export default ItemList;

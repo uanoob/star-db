@@ -1,71 +1,46 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './item-details.css';
 import Spinner from '../spinner/spinner';
-import ErrorBoundry from '../error-boundry/error-boundry';
-import ErrorButton from '../error-button/error-button';
 
-class ItemDetails extends Component {
-  state = {
-    item: null,
-    image: '',
-    loading: true,
-  };
+const ItemDetails = ({ getItem, getImageUrl, match, children }) => {
+  const [loading, setLoading] = useState(true);
+  const [item, setItem] = useState(null);
+  const [image, setImage] = useState('');
 
-  componentDidMount() {
-    this.updatePerson();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { id } = this.props;
-    if (id !== prevProps.id) {
-      this.updatePerson();
-    }
-  }
-
-  updatePerson = () => {
-    const { id, getData, getImageUrl } = this.props;
-    if (!id) {
-      return;
-    }
-    getData(id)
-      .then((item) => {
-        this.setState({
-          item,
-          image: getImageUrl(item),
-          loading: false,
-        });
+  useEffect(() => {
+    const { id } = match.params;
+    getItem(id)
+      .then(item => {
+        setItem(item);
+        setImage(getImageUrl(item));
+        setLoading(false);
       })
-      .catch(err => console.log(err));
-  };
+      .catch(err => {
+        setLoading(false);
+        console.log(err);
+      });
+  }, [getItem, getImageUrl, match.params]);
 
-  render() {
-    const { item, image, loading } = this.state;
-    const { children } = this.props;
-    return (
-      <ErrorBoundry>
-        {loading ? <Spinner /> : null}
-        {item ? (
-          <div className="person-details card">
-            <img className="person-image" src={image} alt={item.name} />
-
-            <div className="card-body">
-              <h4>{item.name}</h4>
-              <ul className="list-group list-group-flush">
-                {React.Children.map(children, child => React.cloneElement(child, { item }))}
-              </ul>
-              <ErrorButton />
-            </div>
-          </div>
-        ) : null}
-      </ErrorBoundry>
-    );
-  }
-}
+  return loading ? (
+    <Spinner />
+  ) : (
+    <div className='person-details card'>
+      <img className='person-image' src={image} alt={item.name} />
+      <div className='card-body'>
+        <h4>{item.name}</h4>
+        <ul className='list-group list-group-flush'>
+          {React.Children.map(children, child =>
+            React.cloneElement(child, { item }),
+          )}
+        </ul>
+      </div>
+    </div>
+  );
+};
 
 ItemDetails.propTypes = {
-  id: PropTypes.string.isRequired,
-  getData: PropTypes.func.isRequired,
+  getItem: PropTypes.func.isRequired,
   getImageUrl: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };

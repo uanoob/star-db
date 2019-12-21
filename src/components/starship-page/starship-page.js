@@ -1,40 +1,29 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ItemList from '../item-list/item-list';
-import ItemDetails from '../item-details/item-details';
 import Record from '../record/record';
-import SwapiServiceContext from '../swapi-service-context';
+import { RouteWithSubRoutes } from '../routes';
 
-const StarshipPage = ({ id, onItemSelected }) => {
-  const { getAllStarships, getStarship, getStarshipImage } = useContext(
-    SwapiServiceContext,
-  );
-  return (
-    <div className='row mb2'>
-      <div className='col-md-6'>
-        <ItemList
-          onItemSelected={onItemSelected}
-          getData={getAllStarships}
-          renderItem={item => item.name}
-        />
-      </div>
-      <div className='col-md-6'>
-        <ItemDetails
-          id={id}
-          getData={getStarship}
-          getImageUrl={item => getStarshipImage(item)}>
+const StarshipPage = ({ routes, getList }) => (
+  <div className='row mb2'>
+    <div className='col-md-6'>
+      <ItemList getList={getList} />
+    </div>
+    <div className='col-md-6'>
+      {routes.map(route => (
+        <RouteWithSubRoutes key={route.path} {...route}>
           <Record label='Model' field='model' />
           <Record label='Length' field='length' />
           <Record label='Cargo Capacity' field='cargoCapacity' />
-        </ItemDetails>
-      </div>
+        </RouteWithSubRoutes>
+      ))}
     </div>
-  );
-};
+  </div>
+);
 
 StarshipPage.propTypes = {
-  id: PropTypes.string.isRequired,
-  onItemSelected: PropTypes.func.isRequired,
+  routes: PropTypes.array.isRequired,
+  getList: PropTypes.func.isRequired,
 };
 
 export default StarshipPage;
