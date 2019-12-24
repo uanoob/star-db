@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import './item-details.css';
+import ErrorIndicator from '../error-indicator/error-indicator';
 import Spinner from '../spinner/spinner';
+import './item-details.css';
 
 const ItemDetails = ({ getItem, getImageUrl, match, children }) => {
   const [loading, setLoading] = useState(true);
   const [item, setItem] = useState(null);
   const [image, setImage] = useState('');
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const { id } = match.params;
+    setLoading(true);
     getItem(id)
       .then(item => {
         setItem(item);
@@ -18,12 +21,14 @@ const ItemDetails = ({ getItem, getImageUrl, match, children }) => {
       })
       .catch(err => {
         setLoading(false);
-        console.log(err);
+        setError(true);
       });
   }, [getItem, getImageUrl, match.params]);
 
   return loading ? (
     <Spinner />
+  ) : error ? (
+    <ErrorIndicator />
   ) : (
     <div className='person-details card'>
       <img className='person-image' src={image} alt={item.name} />
