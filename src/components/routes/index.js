@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Route } from 'react-router-dom';
-import ItemDetails from '../item-details/item-details';
-import PeoplePage from '../people-page/people-page';
-import StarshipsPage from '../starship-page/starship-page';
-import PlanetsPage from '../planets-page/planets-page';
 import swapiService from '../../services/swapi-service';
+import Spinner from '../spinner/spinner';
+
+const PeoplePage = lazy(() => import('../people-page/people-page'));
+const PlanetsPage = lazy(() => import('../planets-page/planets-page'));
+const StarshipsPage = lazy(() => import('../starship-page/starship-page'));
+const ItemDetails = lazy(() => import('../item-details/item-details'));
 
 export const RouteWithSubRoutes = ({
   path,
@@ -18,14 +20,16 @@ export const RouteWithSubRoutes = ({
   <Route
     path={path}
     render={props => (
-      <Component
-        {...props}
-        getList={getList}
-        getItem={getItem}
-        getImageUrl={getImageUrl}
-        routes={routes}>
-        {children}
-      </Component>
+      <Suspense fallback={<Spinner />}>
+        <Component
+          {...props}
+          getList={getList}
+          getItem={getItem}
+          getImageUrl={getImageUrl}
+          routes={routes}>
+          {children}
+        </Component>
+      </Suspense>
     )}
   />
 );
