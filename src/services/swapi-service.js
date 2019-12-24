@@ -82,4 +82,4 @@ class SwapiService {
   getStarshipImage = ({ id }) => `${this._image}/starships/${id}.jpg`;
 }
 
-export default SwapiService;
+export default new SwapiService();

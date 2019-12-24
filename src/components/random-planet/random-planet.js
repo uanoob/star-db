@@ -1,55 +1,41 @@
-import React, { Component } from 'react';
-import SwapiService from '../../services/swapi-service';
-import './random-planet.css';
+import React, { useState, useEffect, useContext } from 'react';
+import SwapiServiceContext from '../swapi-service-context';
 import Spinner from '../spinner/spinner';
 import RandomPlanetView from './random-planet-view';
 import ErrorIndicator from '../error-indicator/error-indicator';
+import './random-planet.css';
 
-export default class RandomPlanet extends Component {
-  swapiService = new SwapiService();
+const RandomPlanet = () => {
+  const [planet, setPlanet] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const swapiService = useContext(SwapiServiceContext);
 
-  state = {
-    planet: {},
-    loading: true,
-    error: false,
-  };
-
-  componentDidMount() {
-    this.updatePlanet();
-    // this.interval = setInterval(this.updatePlanet, 5000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  onPlanetLoaded = (planet) => {
-    this.setState({ planet, loading: false });
-  };
-
-  onError = () => {
-    this.setState({
-      loading: false,
-      error: true,
-    });
-  };
-
-  updatePlanet = () => {
+  useEffect(() => {
     const id = Math.floor(Math.random() * 25) + 2;
-    this.swapiService
+    swapiService
       .getPlanet(id)
-      .then(this.onPlanetLoaded)
-      .catch(this.onError);
-  };
+      .then(planet => {
+        setPlanet(planet);
+        setLoading(false);
+      })
+      .catch(e => {
+        setLoading(false);
+        setError(true);
+      });
+  }, [swapiService]);
 
-  render() {
-    const { planet, loading, error } = this.state;
-    return (
-      <div className="random-planet jumbotron rounded">
-        {!(loading || error) ? <RandomPlanetView planet={planet} /> : null}
-        {loading ? <Spinner /> : null}
-        {error ? <ErrorIndicator /> : null}
-      </div>
-    );
-  }
-}
+  return (
+    <div className='random-planet jumbotron rounded'>
+      {loading ? (
+        <Spinner />
+      ) : error ? (
+        <ErrorIndicator />
+      ) : (
+        <RandomPlanetView planet={planet} />
+      )}
+    </div>
+  );
+};
+
+export default RandomPlanet;

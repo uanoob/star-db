@@ -4,9 +4,7 @@ import ItemDetails from '../item-details/item-details';
 import PeoplePage from '../people-page/people-page';
 import StarshipsPage from '../starship-page/starship-page';
 import PlanetsPage from '../planets-page/planets-page';
-import SwapiService from '../../services/swapi-service';
-
-const swapiService = new SwapiService();
+import swapiService from '../../services/swapi-service';
 
 export const RouteWithSubRoutes = ({
   path,
