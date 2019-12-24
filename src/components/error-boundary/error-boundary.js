@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ErrorIndicator from '../error-indicator/error-indicator';
 
-class ErrorBoundry extends Component {
+class ErrorBoundary extends Component {
   state = {
     hasError: false,
   };
@@ -23,8 +23,8 @@ class ErrorBoundry extends Component {
   }
 }
 
-ErrorBoundry.propTypes = {
+ErrorBoundary.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default ErrorBoundry;
+export default ErrorBoundary;
