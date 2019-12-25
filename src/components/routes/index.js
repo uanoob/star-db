@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { Route } from 'react-router-dom';
-import swapiService from '../../services/swapi-service';
+import * as swapiService from '../../services/swapi-service';
 import Spinner from '../spinner/spinner';
 
 const PeoplePage = lazy(() => import('../people-page/people-page'));
