@@ -1,8 +1,11 @@
-##STAR-DB
+## STAR-DB
 
-#Deployment
-npm run build
+## Deployment
 
-#Static Server
-npm install -g serve
-serve -s build
+### 'npm run build'
+
+
+## Static Server
+
+### 'npm install -g serve'
+### 'serve -s build'
